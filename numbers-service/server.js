@@ -1,25 +1,47 @@
-var express = require('express');
-var basicAuth = require('basic-auth-connect');
+var express = require("express");
+var basicAuth = require("basic-auth-connect");
 var app = express();
 
-app.get('/v2/catalog', function (req, res) {
-  var catalog = {
-    services: [{
-      id: "05c03385-1f7f-48f6-ae39-d131a517da33",
-      name: "numbers",
-      description: "Get a phone number!",
-      bindable: true,
-      plans: [{
-        id: "b178182f-4f87-47af-9a0a-7b036080792e",
-        name: "default",
-        description: "The default plan: get 1 number"
-      }]
-    }]
-  }
+var getCatalog = require('./catalog');
+
+app.get("/v2/catalog", function (req, res) {
+
+  var catalog = getCatalog();
 
   res.send(JSON.stringify(catalog));
 });
 
+app.put("/v2/service_instances/:id", function(req, res) {
+  res.send("{}");
+});
+
+app.delete("/v2/service_instances/:id", function(req, res) {
+  res.send("{}");
+});
+
+app.put("/v2/service_instances/:instance_id/service_bindings/:binding_id",
+  function(req, res) {
+
+  var sid = process.env.ACCOUNT_SID;
+  var token = process.env.AUTH_TOKEN;
+  var number = process.env.TWILIO_NUMBER;
+
+  var creds = {
+    credentials: {
+      account_sid: sid,
+      auth_token: token,
+      number: number
+    }
+  };
+
+  res.send(JSON.stringify(creds));
+});
+
+app.delete("/v2/service_instances/:instance_id/service_bindings/:binding_id",
+  function(req, res) {
+
+  res.send("{}");
+});
 
 var port = process.env.PORT;
 var username = process.env.APP_USER;
@@ -29,5 +51,5 @@ app.use(basicAuth(username, password));
 var server = app.listen(port, function () {
   var host = server.address().address;
 
-  console.log('Example app listening at http://%s:%s', host, port);
+  console.log("Service app listening at http://%s:%s", host, port);
 });

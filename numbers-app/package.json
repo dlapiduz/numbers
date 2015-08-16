@@ -1,6 +1,9 @@
 {
   "dependencies": {
     "basic-auth-connect": "^1.0.0",
+    "body-parser": "^1.13.3",
+    "cfenv": "^1.0.0",
+    "ejs": "^2.3.3",
     "express": "^4.13.3",
     "lodash": "^3.10.1",
     "twilio": "^2.2.1"
